@@ -48,20 +48,10 @@ function New-SYDIDocument {
                    ParameterSetName='Default')]
         [ValidateNotNull()]
         [ValidateNotNullOrEmpty()]
-        [Alias("un")] 
-        [string]
-        $Username,
-
-        # help description
-        [Parameter(Mandatory=$true,
-                   ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true,
-                   ParameterSetName='Default')]
-        [ValidateNotNull()]
-        [ValidateNotNullOrEmpty()]
-        [Alias("pw")] 
-        [string]
-        $Password,
+        [System.Management.Automation.PSCredential]
+        [System.Management.Automation.Credential()]
+        [Alias("cred")]
+        $Credential,
 
         # help description
         [Parameter(Mandatory=$false,
@@ -90,6 +80,8 @@ function New-SYDIDocument {
     begin {
         $SYDIPath = "$PSScriptRoot\Sydi-Server.vbs"
         $Filename = $OutputPath + $ComputerName + ".docx"
+        $UserName = $Credential.UserName
+        $Password = $Credential.GetNetworkCredential().Password
     }
     
     process {
