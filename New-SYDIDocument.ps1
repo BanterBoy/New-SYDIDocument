@@ -1,24 +1,4 @@
 <#
-function New-SYDIDocument {
-    
-    param (
-
-        $ComputerName,
-        $Username,
-        $Password,
-        $OutputPath
-        )
-        
-        $SYDIPath = "$PSScriptRoot\sydi-server-2.4\Sydi-Server.vbs"
-        $Filename = $OutputPath + $ComputerName + ".docx"
-
-    cscript.exe $SYDIPath -wabefghipPqrsSu -racdklp -ew -f10 -d -o"$FileName" -t"$ComputerName" -u"$Username" -p"$Password"
-    
-}
-#>
-
-
-<#
 .SYNOPSIS
     Short description
 .DESCRIPTION
@@ -40,6 +20,7 @@ function New-SYDIDocument {
 .FUNCTIONALITY
     The functionality that best describes this cmdlet
 #>
+
 function New-SYDIDocument {
     [CmdletBinding(DefaultParameterSetName='Default',
                    SupportsShouldProcess=$true,
@@ -57,7 +38,7 @@ function New-SYDIDocument {
         [ValidateNotNull()]
         [ValidateNotNullOrEmpty()]
         [Alias("cn")] 
-        [string]
+        [string[]]
         $ComputerName,
 
         # help description
@@ -83,6 +64,17 @@ function New-SYDIDocument {
         $Password,
 
         # help description
+        [Parameter(Mandatory=$false,
+                   ValueFromPipeline=$true,
+                   ValueFromPipelineByPropertyName=$true,
+                   ParameterSetName='Default')]
+        [ValidateNotNull()]
+        [ValidateNotNullOrEmpty()]
+        [Alias("fs")] 
+        [int]
+        $FontSize = 12,
+
+        # help description
         [Parameter(Mandatory=$true,
                    ValueFromPipeline=$true,
                    ValueFromPipelineByPropertyName=$true,
@@ -96,13 +88,13 @@ function New-SYDIDocument {
     )
     
     begin {
-        $SYDIPath = "$PSScriptRoot\sydi-server-2.4\Sydi-Server.vbs"
+        $SYDIPath = "$PSScriptRoot\Sydi-Server.vbs"
         $Filename = $OutputPath + $ComputerName + ".docx"
     }
     
     process {
         if ($pscmdlet.ShouldProcess("Target", "Operation")) {
-            cscript.exe $SYDIPath -wabefghipPqrsSu -racdklp -ew -f10 -d -o"$FileName" -t"$ComputerName" -u"$Username" -p"$Password"
+            cscript.exe $SYDIPath -wabefghipPqrsSu -racdklp -ew -f"$FontSize" -d -o"$FileName" -t"$ComputerName" -u"$Username" -p"$Password"
         }
     }
     
